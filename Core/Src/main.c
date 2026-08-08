@@ -37,7 +37,7 @@
 #include "buzzer.h"   /* 蜂鸣器驱动的函数声明 */
 #include "led.h"      /* LED 驱动的函数声明 */
 
-#include "user_beep.h"
+// 在这里替换成#include user_beep.h
 
 /* USER CODE END Includes */
 
@@ -50,9 +50,9 @@
 /* USER CODE BEGIN PD */
 /* #define 是宏定义：编译前会把名字替换成后面的内容 */
 #define LED_COUNT   4U    /* 板载 LED 数量，U 表示 unsigned 无符号数 */
-#define BLINK_TIMES 3U    /* 每颗 LED 闪烁次数 */
-#define DELAY_MS    500U  /* LED 亮/灭持续时间，单位毫秒 */
-#define BEEP_MS     300U  /* 蜂鸣器响一声的时长 */
+#define BLINK_TIMES 5U    /* 每颗 LED 闪烁次数 */
+#define DELAY_MS    250U  /* LED 亮/灭持续时间，单位毫秒 */
+#define BEEP_MS     120U  /* 蜂鸣器响一声的时长 */
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -89,7 +89,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   /* 局部变量：只能在 main 函数内使用 */
-  uint8_t  current_led = 2U;              /* 当前要操作的 LED 编号 */
+  uint8_t  current_led = 1U;              /* 当前要操作的 LED 编号 */
   uint16_t blink_times = BLINK_TIMES;/* 每颗 LED 闪烁次数 */
   uint32_t delay_ms    = DELAY_MS;   /* 亮/灭延时 */
   const uint8_t led_count = LED_COUNT; /* const 表示该变量不允许修改 */
@@ -128,14 +128,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    current_led = 2U; /* 从第 2 颗 LED 开始 */
+    current_led = 1U; /* 练习点：改成 2U，观察从哪颗 LED 开始 */
 
     /* while 循环：条件成立就反复执行 {} 里的代码 */
     while (current_led <= led_count)
     {
-      blink_led(current_led, blink_times, delay_ms);
-      current_led++; /* 等价于 current_led = current_led + 1 */
+      blink_led(current_led, current_led, delay_ms);
+      current_led++;
     }
+
 
 
     /* if / else 判断：让延时每次变快一点，到 100 后重新回到初始值 */
