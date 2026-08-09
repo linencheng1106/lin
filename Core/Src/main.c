@@ -57,6 +57,17 @@ static void MPU_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void led_waterflow(void)
+{
+    uint8_t led_num;
+
+    for (led_num = 0U; led_num < LED_NUM_MAX; led_num++)
+    {
+        led_on(led_num);
+        HAL_Delay(100U);
+        led_off(led_num);
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -109,10 +120,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    led_on(0U);
-    HAL_Delay(250U);
-    led_off(0U);
-    HAL_Delay(250U);
+   led_waterflow();
   }
   /* USER CODE END 3 */
 }
