@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "led.h"
+#include "led_flow.h"
 #include "buzzer.h"
 
 /* USER CODE END Includes */
@@ -57,17 +57,6 @@ static void MPU_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void led_waterflow(void)
-{
-    uint8_t led_num;
-
-    for (led_num = 0U; led_num < LED_NUM_MAX; led_num++)
-    {
-        led_on(led_num);
-        HAL_Delay(100U);
-        led_off(led_num);
-    }
-}
 
 /* USER CODE END 0 */
 
@@ -109,6 +98,17 @@ int main(void)
   HAL_Delay(100U);
   buzzer_off();
 
+  led_flow_config flow_config =
+  {
+    {
+      { 0U, 100U, 100U },
+      { 1U, 100U, 100U },
+      { 2U, 100U, 100U },
+      { 3U, 100U, 100U }
+    }
+  };
+  config_apply(flow_config);
+
   /* 题目3完成后，在这里调用封装好的流水灯初始化/运行函数 */
 
   /* USER CODE END 2 */
@@ -120,7 +120,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-   led_waterflow();
+    led_flow_run();
   }
   /* USER CODE END 3 */
 }
