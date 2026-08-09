@@ -7,7 +7,7 @@ static const uint16_t led_pin[LED_NUM_MAX] = {LED1_PIN, LED2_PIN, LED3_PIN, LED4
 /* 点亮 LED1 */
 void led_on(uint8_t led_num)
 {
-    if(LED_RIGHT_NUM(led_num))
+    if(!LED_RIGHT_NUM(led_num))
     {
         return;
     }
@@ -17,7 +17,7 @@ void led_on(uint8_t led_num)
 /* 熄灭 LED1 */
 void led_off(uint8_t led_num)
 {
-    if(LED_RIGHT_NUM(led_num))
+    if(!LED_RIGHT_NUM(led_num))
     {
         return;
     }
