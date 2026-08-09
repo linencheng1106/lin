@@ -1,4 +1,5 @@
 /* USER CODE BEGIN Header */
+
 /**
   ******************************************************************************
   * @file           : main.c
@@ -45,7 +46,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int signal = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,9 +110,6 @@ int main(void)
   };
   config_apply(flow_config);
 
-  /* 题目3完成后，在这里调用封装好的流水灯初始化/运行函数 */
-
-  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -120,7 +118,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    led_flow_run();
+    led_flow_choose_mode();
   }
   /* USER CODE END 3 */
 }

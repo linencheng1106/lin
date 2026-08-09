@@ -1,7 +1,11 @@
+
 #ifndef LED_FLOW_H
 #define LED_FLOW_H
+
 #include "stm32h7xx_hal.h"
 #define LED_FLOW_STEP_COUNT 4U
+
+void led_flow_choose_mode(void);
 typedef struct
 {
     uint8_t  led_num;
