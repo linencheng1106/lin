@@ -77,7 +77,11 @@ bool packet_queue_is_full(const packet_queue *q)
 /* TODO: 用位运算完成封包，并填入校验和 */
 void command_pack_create(command_packet *pkt, uint8_t blink_count, uint8_t led_mask)
 {
-    /* 在此实现 */
+    led_mask &= CMD_LED_MASK;
+    pkt->header[0]=(HEADER_WORD & 0xFF00)>>8;
+    pkt->header[1]=(HEADER_WORD & 0x00FF);
+    pkt->cmd = (blink_count<<CMD_BLINK_SHIFT)|(led_mask);
+    pkt->checksum = PACKET_CHECKSUM(pkt->header[0], pkt->header[1], pkt->cmd);
 }
 
 /* ================================================================
