@@ -34,7 +34,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LED_MASK_LED1 0x01U
+#define LED_MASK_LED2 0x02U
+#define LED_MASK_LED3 0x04U
+#define LED_MASK_LED4 0x08U
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
