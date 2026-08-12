@@ -1,0 +1,17 @@
+# Keil MDK build output
+MDK-ARM/f4/
+MDK-ARM/*.uvguix.*
+
+# Editor-local settings
+.vscode/
+
+# Common generated files
+*.o
+*.d
+*.axf
+*.hex
+*.map
+*.lnp
+*.dep
+*.build_log.htm
+
