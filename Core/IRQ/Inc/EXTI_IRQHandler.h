@@ -3,5 +3,5 @@
 
 #include "main.h"
 
-
+extern volatile uint8_t Beep_Trigger;
 #endif

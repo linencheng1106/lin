@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -28,6 +29,7 @@
 #include "EXTI_IRQHandler.h"
 #include "Led.h"
 #include "state.h"
+#include "UART_IRQHandler.h"
 
 /* USER CODE END Includes */
 
@@ -94,11 +96,13 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   Key_Init();
   Led_Init();
   State_Init();
+  UART_Start_Recieve();
   /* TIM2 interrupts every 2 ms and update the breathing brightness. */
   if (HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
   {
@@ -114,7 +118,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    State_Task();
+    if (Beep_Trigger > 0)
+    {
+      Beep_Trigger = 0;
+      Beep_Start();
+    }
+
+    Beep_Task();
   }
   /* USER CODE END 3 */
 }
