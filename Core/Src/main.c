@@ -28,8 +28,9 @@
 #include "Key.h"
 #include "EXTI_IRQHandler.h"
 #include "Led.h"
-#include "state.h"
 #include "UART_IRQHandler.h"
+#include "can.h"
+#include "CAN_IRQHandler.h"
 
 /* USER CODE END Includes */
 
@@ -101,8 +102,9 @@ int main(void)
 
   Key_Init();
   Led_Init();
-  State_Init();
   UART_Start_Recieve();
+  MX_CAN1_Init();
+  CAN_State_Init();
   /* TIM2 interrupts every 2 ms and update the breathing brightness. */
   if (HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
   {
@@ -118,13 +120,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if (Beep_Trigger > 0)
-    {
-      Beep_Trigger = 0;
-      Beep_Start();
-    }
+    CAN_State_Task();
 
-    Beep_Task();
   }
   /* USER CODE END 3 */
 }

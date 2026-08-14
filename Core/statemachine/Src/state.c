@@ -3,6 +3,7 @@
 #include "Beep.h"
 #include "Key.h"
 
+
 static State_TypeDef current_state = STATE_OFF;
 
 static void State_Change(State_TypeDef next_state)
@@ -85,3 +86,5 @@ State_TypeDef State_GetCurrent(void)
 {
     return current_state;
 }
+
+

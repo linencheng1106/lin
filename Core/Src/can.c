@@ -55,6 +55,46 @@ void MX_CAN1_Init(void)
   }
   /* USER CODE BEGIN CAN1_Init 2 */
 
+  CAN_FilterTypeDef CAN_FilterConfig = {0};  // 定义过滤器
+  //把两个 29 位扩展 CAN ID 转换成 STM32 CAN 过滤器寄存器使用的 32 位格式，左移3位对齐
+  uint32_t id1 = (0x01020101U << 3) | CAN_ID_EXT;
+  uint32_t id2 = (0x01020201U << 3) | CAN_ID_EXT;
+  /*------------------------------ 过滤器1 ------------------------------*/
+  CAN_FilterConfig.FilterActivation = ENABLE;                     // 激活过滤器
+  CAN_FilterConfig.SlaveStartFilterBank = 14;                     // CAN1、CAN2的过滤器分割线：0~13给CAN1，14~27给CAN2
+  CAN_FilterConfig.FilterBank = 0;                                // 使用第0个过滤器组
+  CAN_FilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;           // 过滤器位宽
+  CAN_FilterConfig.FilterMode = CAN_FILTERMODE_IDLIST;            // 掩码模式
+  CAN_FilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;       // 用哪个FIFO存储
+  /* FR0 R1(32位)*/
+//((0x01010203 << 3) | 4) & 0xFFFF 低16位
+//((0x01010203 << 3) | 4) >> 16 高16位
+  CAN_FilterConfig.FilterIdHigh =(uint16_t)(id1 >> 16);
+  CAN_FilterConfig.FilterIdLow =(uint16_t)(id1 & 0xFFFFU);
+
+  CAN_FilterConfig.FilterMaskIdHigh =(uint16_t)(id2 >> 16);
+  CAN_FilterConfig.FilterMaskIdLow =(uint16_t)(id2 & 0xFFFFU);
+
+  if (HAL_CAN_ConfigFilter(&hcan1, &CAN_FilterConfig) != HAL_OK)   // 应用硬件中
+  {
+    Error_Handler();
+  }
+
+  if (HAL_CAN_Start(&hcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
   /* USER CODE END CAN1_Init 2 */
 
 }

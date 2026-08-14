@@ -8,6 +8,8 @@
 
 void Beep_Init(void);
 void Beep_Start(void);
+void Beep_Can(uint8_t count);
 void Beep_Task(void);
+uint8_t Beep_CanIsFinished(void);
 
 #endif
