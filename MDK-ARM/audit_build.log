@@ -1,0 +1,28 @@
+*** Using Compiler 'V6.18', folder: 'E:\Program Files\ARM\ARMCLANG\Bin'
+Build target 'freertos_8_14'
+compiling main.c...
+compiling CAN_IQRHandler.c...
+../Core/Src/can.c(21): warning: In file included from...../Core/Inc\can.h(23): error: unknown type name 'HAL_StatusTypeDef'
+HAL_StatusTypeDef CAN_SendMasterNoiseReply(void);
+^
+../Core/Inc\can.h(24): error: unknown type name 'HAL_StatusTypeDef'
+HAL_StatusTypeDef CAN_SendSlaveNoise(uint32_t sequence);
+^
+../Core/Inc\can.h(24): error: unknown type name 'uint32_t'
+HAL_StatusTypeDef CAN_SendSlaveNoise(uint32_t sequence);
+                                     ^
+3 errors generated.
+compiling can.c...
+../Core/Src/freertos.c(227): error: use of undeclared identifier 'sequen'; did you mean 'sequence'?
+      sequen++;
+      ^~~~~~
+      sequence
+../Core/Src/freertos.c(218): note: 'sequence' declared here
+  uint32_t sequence = 0U;
+           ^
+1 error generated.
+compiling freertos.c...
+compiling led.c...
+"freertos_8_14\freertos_8_14.axf" - 4 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:02

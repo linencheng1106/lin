@@ -1,12 +1,15 @@
 --cpu=Cortex-M4.fp.sp
 "freertos_8_14\startup_stm32f405xx.o"
 "freertos_8_14\main.o"
+"freertos_8_14\gpio.o"
 "freertos_8_14\freertos.o"
+"freertos_8_14\can.o"
 "freertos_8_14\stm32f4xx_it.o"
 "freertos_8_14\stm32f4xx_hal_msp.o"
 "freertos_8_14\stm32f4xx_hal_timebase_tim.o"
 "freertos_8_14\stm32f4xx_hal_tim.o"
 "freertos_8_14\stm32f4xx_hal_tim_ex.o"
+"freertos_8_14\stm32f4xx_hal_can.o"
 "freertos_8_14\stm32f4xx_hal_rcc.o"
 "freertos_8_14\stm32f4xx_hal_rcc_ex.o"
 "freertos_8_14\stm32f4xx_hal_flash.o"
@@ -35,6 +38,7 @@
 "freertos_8_14\buzzer.o"
 "freertos_8_14\led.o"
 "freertos_8_14\timer.o"
+"freertos_8_14\can_iqrhandler.o"
 --strict --scatter "freertos_8_14\freertos_8_14.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
