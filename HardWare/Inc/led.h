@@ -33,6 +33,7 @@ void flowing_led_init(void);
 void flowing_led(void);
 void breathing_led_init(void);
 void breathing_led(void);
+void breathing_led_set(uint8_t enable, uint16_t speed);
 
 
 

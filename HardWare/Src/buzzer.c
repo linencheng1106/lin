@@ -48,7 +48,9 @@ void buzzer_task(void)
         buzzer_active = 0;
      }
 }
+
 uint8_t buzzer_trigger_times=0;
+
 void buzzer_alarm_fsm(void)
 {
     typedef enum
