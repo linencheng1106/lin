@@ -215,11 +215,11 @@ void BUZZER_TASK(void *argument)
 /* USER CODE BEGIN Application */
 void CAN_TX_TASK(void *argument)
 {
-    uint32_t noise_sequence = 0U;
-    uint8_t float_period_count = 0U;
-    float feedback_value = 0.0f;
+    uint32_t noise_sequence = 0U; // 500 Hz报文序号
+    uint8_t float_period_count = 0U; // 2 ms循环计数
+    float feedback_value = 0.0f; // 反馈值0.0～10.0
 
-    TickType_t last_wake_time;
+    TickType_t last_wake_time; // 上次唤醒时间
     last_wake_time = xTaskGetTickCount();
 
     for (;;)
@@ -240,6 +240,7 @@ void CAN_TX_TASK(void *argument)
       float_period_count++;
 
       //500 Hz任务循环多少次之后，发送一次100 Hz float报文。
+      /* 5次 = 10 ms = 100 Hz */
       if (float_period_count >= 5U)
       {
         float_period_count = 0U;
@@ -259,9 +260,6 @@ void CAN_TX_TASK(void *argument)
         }
       }
 
-        /*
-         * 固定每2 ms唤醒一次，避免普通延时造成周期漂移。
-         */
         vTaskDelayUntil(&last_wake_time,pdMS_TO_TICKS(CAN_NOISE_PERIOD_MS));
     }
 }

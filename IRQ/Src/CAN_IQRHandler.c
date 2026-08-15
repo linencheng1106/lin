@@ -4,16 +4,16 @@
 #include "Timer.h"
 #include "can_protocol.h"
 
-CAN_RxHeaderTypeDef RxHeader;
-uint8_t RxData[8];
+CAN_RxHeaderTypeDef RxHeader; // CAN接收帧头
+uint8_t RxData[8]; // CAN接收数据，最多8字节
 
 
 extern uint8_t led_flow_state;
 extern uint8_t buzzer_trigger_times;
 
-volatile uint8_t can_breath_command_pending = 0U;
-volatile uint8_t can_breath_enable_request = CAN_BREATH_DISABLE;
-volatile uint16_t can_breath_speed_request = CAN_BREATH_SPEED_MIN;
+volatile uint8_t can_breath_command_pending = 0U; // 新命令标志：0没有，1有
+volatile uint8_t can_breath_enable_request = CAN_BREATH_DISABLE; // 开关：0关闭，1开启
+volatile uint16_t can_breath_speed_request = CAN_BREATH_SPEED_MIN; // 速度0x0001～0x1000
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
@@ -28,10 +28,11 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
             
             else if(RxHeader.StdId == 0x001)
             {
-                uint8_t breath_enable;
-                uint16_t breath_speed;
+                uint8_t breath_enable; // Data[0]：开关
+                uint16_t breath_speed; // Data[1..2]：速度
                 breath_enable = RxData[CAN_BREATH_ENABLE_INDEX];
                 
+                /* 高字节左移8位 */
                 breath_speed = ((uint16_t)RxData[CAN_BREATH_SPEED_HIGH_INDEX] << 8U) |((uint16_t)RxData[CAN_BREATH_SPEED_LOW_INDEX]);
                 
                 /*

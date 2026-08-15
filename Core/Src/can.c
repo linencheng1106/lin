@@ -61,6 +61,8 @@ void MX_CAN1_Init(void)
   CAN_FilterConfig.FilterMode = CAN_FILTERMODE_IDLIST;
   CAN_FilterConfig.FilterScale = CAN_FILTERSCALE_16BIT;
 
+  /* 左移5位：把标准ID放到过滤器bit15～bit5 */
+
   /* 位置1：0x001呼吸灯控制 */
   CAN_FilterConfig.FilterIdHigh =(uint16_t)(CAN_ID_BREATH_CONTROL << 5U);
 
@@ -166,9 +168,9 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
  */
 HAL_StatusTypeDef CAN_SendSlaveNoise(uint32_t sequence)
 {
-    CAN_TxHeaderTypeDef TxHeader = {0};
-    uint32_t TxMailbox = 0U;
-    uint8_t TxData[CAN_DLC_SLAVE_NOISE] = {0};
+    CAN_TxHeaderTypeDef TxHeader = {0}; // CAN发送帧头
+    uint32_t TxMailbox = 0U; // CAN发送邮箱
+    uint8_t TxData[CAN_DLC_SLAVE_NOISE] = {0}; // 8字节发送数据
 
     /* uint32_t递增序号，小端序:低位字节放在低地址、先发送 */
     //sequence表示第几帧//
@@ -205,9 +207,9 @@ HAL_StatusTypeDef CAN_SendSlaveNoise(uint32_t sequence)
 
 HAL_StatusTypeDef CAN_SendFloatFeedback(float value)
 {
-    CAN_TxHeaderTypeDef TxHeader = {0};
-    uint32_t TxMailbox = 0U;
-    uint8_t TxData[CAN_DLC_FLOAT_FEEDBACK] = {0};
+    CAN_TxHeaderTypeDef TxHeader = {0}; // CAN发送帧头
+    uint32_t TxMailbox = 0U; // CAN发送邮箱
+    uint8_t TxData[CAN_DLC_FLOAT_FEEDBACK] = {0}; // float的4字节数据
 
     /*
      * 将float的4字节原始二进制复制到Data[0..3]。

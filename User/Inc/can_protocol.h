@@ -37,8 +37,8 @@
 #define CAN_BREATH_DISABLE                           0x00U
 #define CAN_BREATH_ENABLE                            0x01U
 
-#define CAN_BREATH_SPEED_MIN                         0x0001U
-#define CAN_BREATH_SPEED_MAX                         0x1000U
+#define CAN_BREATH_SPEED_MIN                         0x0001U /* 最小速度，对应4000 ms */
+#define CAN_BREATH_SPEED_MAX                         0x1000U /* 最大速度，对应400 ms */
 
 /* ========================================================= */
 /* 0x002：从板发送float反馈，标准数据帧，DLC=4，100 Hz       */

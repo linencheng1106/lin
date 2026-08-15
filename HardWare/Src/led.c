@@ -112,15 +112,20 @@ void flowing_led()//流水灯函数
 }
 
 //---------------------------------------------呼吸灯-----------------------------------------//
-#define BREATH_PWM_PERIOD_MS       20U
-#define BREATH_CYCLE_SLOW_MS       4000U
-#define BREATH_CYCLE_FAST_MS       400U
+#define BREATH_PWM_PERIOD_MS       20U    // PWM周期20 ms
+#define BREATH_CYCLE_SLOW_MS       4000U  // 最慢周期4000 ms
+#define BREATH_CYCLE_FAST_MS       400U   // 最快周期400 ms
 
-//呼吸灯使用非阻塞时间驱动设计，根据系统Tick计算当前呼吸周期相位，前半周期渐亮，后半周期渐暗，并使用20 ms软件PWM调节亮度。顶层包含开启和关闭两种工作状态，但亮度变化没有使用显式枚举状态机。//
-static uint8_t breathing_enabled = 0U;//关闭//
-static uint16_t breathing_speed = CAN_BREATH_SPEED_MIN;
-static uint32_t breathing_cycle_period_ms = BREATH_CYCLE_SLOW_MS;
-static uint32_t breathing_start_tick = 0U;
+// 呼吸灯使用非阻塞设计
+// 根据系统Tick计算当前呼吸周期相位，
+// 前半周期渐亮，后半周期渐暗，
+// 并使用20 ms软件PWM调节亮度。
+// 顶层包含开启和关闭两种工作状态，
+// 但亮度变化没有使用显式枚举状态机。//
+static uint8_t breathing_enabled = 0U;// 呼吸灯开关：0关闭，1开启
+static uint16_t breathing_speed = CAN_BREATH_SPEED_MIN; // 最小速度，对应4000 ms
+static uint32_t breathing_cycle_period_ms = BREATH_CYCLE_SLOW_MS; // 当前呼吸周期，单位ms
+static uint32_t breathing_start_tick = 0U; // 呼吸开始时间，单位ms
 
 void breathing_led_init(void)
 {
@@ -159,7 +164,8 @@ void breathing_led_set(uint8_t enable, uint16_t speed)
     /*
      * 将0x0001～0x1000转换为4000～400 ms。
      * speed越大，呼吸周期越短。
-     * 按照比例来转化：速度在整个范围内前进了多少*周期允许变化多少/总速度范围
+     * 按照比例来转化：(当前速度 - 最小速度) *(最慢周期 - 最快周期) / (最大速度 - 最小速度)
+     * 从4000 ms中减去缩短量，速度越大，周期越短。
      */
     breathing_cycle_period_ms =
         BREATH_CYCLE_SLOW_MS -
@@ -181,11 +187,11 @@ void breathing_led_set(uint8_t enable, uint16_t speed)
 //根据PWM决定这一毫秒LED应该亮还是灭。
 void breathing_led(void)
 {
-    uint32_t elapsed; //表示从本次呼吸开始到现在，已经过去了多少毫秒。
-    uint32_t cycle_position; //表示当前处于完整呼吸周期中的什么位置
-    uint32_t half_cycle;
-    uint32_t brightness;
-    uint32_t pwm_position;
+    uint32_t elapsed; // 已运行时间，单位ms
+    uint32_t cycle_position; // 当前呼吸周期位置
+    uint32_t half_cycle; // 半周期：前半渐亮，后半渐暗
+    uint32_t brightness; // 亮度等级0～20
+    uint32_t pwm_position; // PWM位置0～19 ms
 
     if (breathing_enabled == 0U)
     {
@@ -204,8 +210,6 @@ void breathing_led(void)
      * 前半周期亮度由0增加到20；
      * 后半周期亮度由20降低到0。
      */
-    
-   
     
     /*假设完整呼吸周期为 1000 ms：
     在呼吸开始时：
@@ -228,7 +232,7 @@ void breathing_led(void)
         brightness = ((breathing_cycle_period_ms - cycle_position) *BREATH_PWM_PERIOD_MS) / half_cycle;
     }
 
-    pwm_position = elapsed % BREATH_PWM_PERIOD_MS;
+    pwm_position = elapsed % BREATH_PWM_PERIOD_MS; // 当前20 ms PWM位置
     
     //brightness 决定一个 20 ms 周期内，LED 点亮多少毫秒
     if (pwm_position < brightness)
